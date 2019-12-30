@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--<bean name="/AccountService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">-->
+        <!--<property name="service" ref="accountService"/>-->
+        <!--<property name="serviceInterface" value="AccountService"/>-->
+    <!--</bean>-->
+    <!--<bean id="accountService" class="AccountServiceImpl"></bean>-->
+
+    <!--<bean name="accountExporter" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">-->
+        <!--<property name="service" ref="accountService"/>-->
+        <!--<property name="serviceInterface" value="AccountService"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="httpInvokerProxy" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">-->
+        <!--<property name="serviceUrl" value="http://127.0.0.1:8074/remoting/AccountService"/>-->
+        <!--<property name="serviceInterface" value="AccountService"/>-->
+        <!--&lt;!&ndash;默认是jdk的https&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="httpInvokerRequestExecutor">&ndash;&gt;-->
+            <!--&lt;!&ndash;<bean class="org.springframework.remoting.httpinvoker.HttpComponentsHttpInvokerRequestExecutor"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--</bean>-->
+    <!--声明式事务-->
+
+    <!-- 一：基于xml配置的事务管理-->
+    <bean class="com.pipichao.spring.dataaccess.transactionmanagement.xmlbased.MService"></bean>
+    <bean class="com.pipichao.spring.dataaccess.transactionmanagement.xmlbased.MiManager"></bean>
+    <!--public 任何返回值类型 任何类 任何packeage 任何方法 任何参数类型 yi常类型-->
+    <aop:config>
+        <!--<aop:pointcut id="fooServiceOperation" expression="execution(* cm.pipicha.spring.dataaccess.transactionmanagement.*Service(..))"></aop:pointcut>-->
+
+        <aop:pointcut id="fooServiceOperation" expression="execution(* cm.pipicha.spring.dataaccess.transactionmanagement.xmlbased.*Service.*(..))"></aop:pointcut>
+        <aop:pointcut id="fooManagerOperation"  expression="execution(* cm.pipicha.spring.dataaccess.transactionmanagement.xmlbased.*Manager.*(..))"></aop:pointcut>
+
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"></aop:advisor>
+
+        <aop:advisor advice-ref="notxAdvice" pointcut-ref="fooManagerOperation"></aop:advisor>
+    </aop:config>
+
+    <tx:advice id="notxAdvice" transaction-manager="notxManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="*"></tx:method>
+        </tx:attributes>
+    </tx:advice>
+    <tx:advice transaction-manager="txManager" id="txAdvice">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" rollback-for="java.lang.Exception"/>
+            <tx:method name="*"></tx:method>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--事务管理器-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <bean id="notxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--<property name="driver" value="com.mysql.cj.jdbc.Driver"></property>-->
+        <property name="url" value="jdbc:mysql://localhost:3306/testdb?serverTimezone=UTC"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="2437262431"></property>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+    </bean>
+
+    <!--  <tx:advice> 的配置 -->
+    <!--<tx:advice>-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="*"-->
+                       <!--isolation="READ_COMMITTED"-->
+                       <!--rollback-for=""-->
+                       <!--propagation="REQUIRED"-->
+                       <!--no-rollback-for=""-->
+                       <!--read-only="true"-->
+                       <!--timeout="-1"/>-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--二：基于注解的事务管理 -->
+    <!--开启事务注解驱动后 配合@Transactional 注解就可以 实现xml配置的切面式的扫描-->
+    <!--测试类-->
+    <bean class="com.pipichao.spring.dataaccess.transactionmanagement.anotationbased.MyService"></bean>
+    <!--启动事务注解驱动-->
+    <tx:annotation-driven transaction-manager="txManager" mode="aspectj" order="1" proxy-target-class="true"></tx:annotation-driven>
+    <!--不同的事物管理-->
+    <bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <qualifier value="tx1" ></qualifier>
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <qualifier value="tx2"></qualifier>
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+
+    <bean id="taxCalculator" class="org.spring.samples.TaxCalculator">
+        <property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
+
+        <!-- other properties -->
+    </bean>
+</beans>

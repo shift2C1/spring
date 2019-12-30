@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+    <!--向spring注册websocket 。allowed-origins：设置跨域-->
+    <websocket:handlers allowed-origins="*">
+        <websocket:mapping path="/myHandler" handler="myHandlerId"/>
+        <websocket:handshake-interceptors>
+            <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"></bean>
+        </websocket:handshake-interceptors>
+
+        <!--开启sockjs 并且设置sockjs客户端位置，默认是从cdn下载，心跳时间检测：默认25s-->
+        <!--<websocket:sockjs client-library-url=""-->
+                          <!--heartbeat-time="10"-->
+                          <!--stream-bytes-limit="512*1024" -->
+                          <!--message-cache-size="10000" -->
+                          <!--disconnect-delay="30*1000"></websocket:sockjs>-->
+
+        <!--<websocket:handshake-handler ref="myHandShakeHandler"></websocket:handshake-handler>-->
+
+    </websocket:handlers>
+    <bean id="myHandlerId" class="com.pipichao.spring.webservlet.websockets.websocketAPI.MyHandler"></bean>
+    <!--<bean id="myHandShakeHandler" class="org.springframework.web.socket.server.support.DefaultHandshakeHandler"></bean>-->
+</beans>

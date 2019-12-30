@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--以schema为基础的aop-->
+    <aop:config>
+
+        <aop:pointcut id="service" expression="execution(* com.pipichao.spring.core.aop.schema_based_support.service..*(..))"></aop:pointcut>
+        <aop:pointcut id="testParam"
+                      expression="execution(* com.pipichao.spring.core.aop.schema_based_support.service..*(..)) &amp;&amp; args(Object,String))"></aop:pointcut>
+
+        <aop:pointcut id="test@Args" expression="within(com.pipichao.spring.core.aop.schema_based_support.service.*)"></aop:pointcut>
+
+        <!--1、申明一个切面-->
+        <aop:aspect ref="myaop" id="myAspect">
+            <!--2、申明切入点-->
+            <!--参数绑定：必须和切面对象方法的参数名字一致 比如：this(param) 的param 和 beforeEg的参数名字param对应-->
+            <aop:pointcut id="servicePointcut"
+                          expression="execution(public * com.pipichao.spring.core.aop.schema_based_support.service..*(..)) &amp;&amp; this(param)"></aop:pointcut>
+
+            <!--3、声明顾问对象-->
+            <!--method：指定切面对象的执行方法-->
+            <aop:before method="beforeEg" pointcut-ref="servicePointcut"></aop:before>
+            <aop:after-returning method="afterReturningEg" returning="retVal"
+                                 pointcut-ref="service"></aop:after-returning>
+            <aop:after-throwing method="afterThrowingEg" pointcut-ref="service" throwing="ex"></aop:after-throwing>
+            <aop:after method="afterEg" pointcut-ref="service"></aop:after>
+
+            <aop:around method="aroundEg" pointcut-ref="testParam"></aop:around>
+            <aop:around method="aroundEg" pointcut-ref="test@Args"></aop:around>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="myaop" class="com.pipichao.spring.core.aop.schema_based_support.aspect.MyAspect">
+
+    </bean>
+
+
+    <!--业务类-->
+    <bean class="com.pipichao.spring.core.aop.schema_based_support.service.Service1">
+
+    </bean>
+</beans>
