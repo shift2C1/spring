@@ -7,27 +7,27 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
   <display-name>spring 学习</display-name>
+<!--servlet3.0 及之前的版本在 web.xml中配置 在之后提出了 java 为基础的配置方式 -->
+<!--  <context-param>-->
+<!--    <param-name>contextConfigLocation</param-name>-->
+<!--    <param-value>classpath:spring.xml</param-value>-->
+<!--  </context-param>-->
+<!--  <listener>-->
+<!--    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+<!--  </listener>-->
 
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring.xml</param-value>
-  </context-param>
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-
-  <servlet>
-    <servlet-name>mvc</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring_mvc.xml</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>mvc</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
+<!--  <servlet>-->
+<!--    <servlet-name>mvc</servlet-name>-->
+<!--    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+<!--    <init-param>-->
+<!--      <param-name>contextConfigLocation</param-name>-->
+<!--      <param-value>classpath:spring_mvc.xml</param-value>-->
+<!--    </init-param>-->
+<!--  </servlet>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>mvc</servlet-name>-->
+<!--    <url-pattern>/</url-pattern>-->
+<!--  </servlet-mapping>-->
 
 
   <!--<servlet>-->

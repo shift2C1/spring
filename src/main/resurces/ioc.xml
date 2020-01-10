@@ -68,6 +68,8 @@
         <property name="username" value="root"></property>
         <property name="password" value="2437262431"></property>
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+<!--        至少查询一条记录（mysql验证方式：select 1）-->
+        <property name="validationQuery" value="select 1"></property>
     </bean>
 
     <!--  <tx:advice> 的配置 -->
@@ -101,9 +103,9 @@
 
 
 
-    <bean id="taxCalculator" class="org.spring.samples.TaxCalculator">
-        <property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
+<!--    <bean id="taxCalculator" class="org.spring.samples.TaxCalculator">-->
+<!--        <property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>-->
 
-        <!-- other properties -->
-    </bean>
+<!--        &lt;!&ndash; other properties &ndash;&gt;-->
+<!--    </bean>-->
 </beans>
