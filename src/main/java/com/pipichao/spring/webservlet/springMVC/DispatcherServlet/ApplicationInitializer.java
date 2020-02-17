@@ -2,14 +2,15 @@ package com.pipichao.spring.webservlet.springMVC.DispatcherServlet;
 
 import com.pipichao.spring.webservlet.springMVC.DispatcherServlet.AppConfig;
 import com.pipichao.spring.webservlet.springMVC.annotationedcontrollers.declaration.WebConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 相当于在 web.xml 中配置
@@ -21,10 +22,12 @@ import javax.servlet.ServletRegistration;
 /**
  * <!--servlet3.0 及之前的版本在 web.xml中配置 在之后提出了 java 为基础的配置方式 -->
  * */
+//@Slf4j
 public class ApplicationInitializer implements WebApplicationInitializer {
     /**初始化的时候会接收 servlet 全局对象*/
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+//        log.info("初始化web容器。。。");
         System.out.println("初始化web容器。。。");
         /*
         * 注册spring 容器
@@ -73,6 +76,7 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         ServletRegistration.Dynamic registration=servletContext.addServlet("dispatcherServlet",dispatcherServlet);
         registration.addMapping("/app/*");
         registration.setLoadOnStartup(1);
-
+//        FilterRegistration.Dynamic corFilter = servletContext.addFilter("corFilter", new DomainFilter());
+//        corFilter.addMappingForServletNames(null,false,"dispatcherServlet");
     }
 }

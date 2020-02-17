@@ -118,7 +118,20 @@
       <artifactId>fastjson</artifactId>
       <version>1.2.62</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
 
+<!--    只能倒一个包 编译器得开启注解识别 不然lombok不识别@sl4j注解-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.30</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>5.2.0.RELEASE</version>
+    </dependency>
 
   </dependencies>
 
